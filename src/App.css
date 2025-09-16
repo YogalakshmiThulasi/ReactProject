@@ -1,38 +1,90 @@
-.App {
+/* Navbar styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 2px solid #000;
+  align-items: center;
+  background: #fff;
+}
+
+.logo a {
+  text-decoration: none;
+  color: #000;
+  font-size: 22px;
+  font-weight: bold;
+  background: #d6ff30;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  margin: 0 10px;
+  font-weight: 500;
+  color: #000;
+}
+
+.nav-links a:hover {
+  color: #d6ff30;
+}
+
+.btn {
+  margin: 0 5px;
+  padding: 6px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  background: #000;
+  color: #fff;
+}
+
+.btn:hover {
+  background: #d6ff30;
+  color: #000;
+}
+
+.icon {
+  margin-left: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Popups for login, signup, wishlist, cart */
+.popup {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin: 15px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+/* Product grid */
+.products {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  width: 200px;
+  border-radius: 8px;
+  background: #fff;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.product-card img {
+  max-width: 100%;
+  border-radius: 6px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.product-card h4 {
+  margin: 10px 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.page-container {
+  padding: 20px;
 }
