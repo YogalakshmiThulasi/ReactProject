@@ -6,6 +6,7 @@ import NewPage from "./New";
 import WomenPage from "./Women";
 import MenPage from "./Men";
 import "./App.css";
+import Footer from "./Footer";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/men" element={<MenPage />} />
         </Routes>
       </div>
+      <Footer/>
     </Router>
   );
 }

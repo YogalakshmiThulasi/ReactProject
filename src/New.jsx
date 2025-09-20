@@ -31,7 +31,8 @@ const products = [
     id: 5,
     name: 'Chill Vibes',
     price: 850,
-    image: '/images/tee5.png'
+    image: '/images/tee5.png',
+     bestseller: true
   },
   {
     id: 6,
@@ -49,7 +50,8 @@ const products = [
     id: 8,
     name: 'Peace Tee',
     price: 1150,
-    image: '/images/tee8.png'
+    image: '/images/tee8.png',
+     bestseller: true
   }
 ];
 
@@ -79,7 +81,7 @@ const NewDrops = () => {
             <li><Link to="/women">Women</Link></li>
           </ul>
 
-          <h3>Filter by</h3>
+          <h3 className='fil'>Filter by</h3>
           <div className="filters">
             <label><input type="checkbox" /> Large</label>
             <label><input type="checkbox" /> Medium</label>
@@ -90,13 +92,15 @@ const NewDrops = () => {
         <main className="products">
           {products.map(product => (
             <div className="product-card" key={product.id}>
-              <div className="image-container">
-                <img src={product.image} alt={product.name} />
-              </div>
-              <h4>{product.name}</h4>
-              <p>₹{product.price}</p>
-              <button onClick={() => addToCart(product)}>Add to Cart</button>
-            </div>
+  <div className="image-container">
+    {product.bestseller && <span className="bestseller-label">Bestseller</span>}
+    <img src={product.image} alt={product.name} />
+  </div>
+  <h4>{product.name}</h4>
+  <p>₹{product.price}</p>
+  <button onClick={() => addToCart(product)}>Add to Cart</button>
+</div>
+
           ))}
         </main>
       </div>

@@ -21,7 +21,7 @@ function Home() {
     <section className="hero-container">
       {/* Title and Delayed Subtitle */}
       <div className="hero-title">
-        {/* <h1>T SHOP</h1> */}
+        <h1>T SHOP</h1>
         {showSubtitle && (
           <div className="hero-subtitle">There’s One for Everyone</div>
         )}
