@@ -32,7 +32,7 @@ const products = [
     name: 'Chill Vibes',
     price: 850,
     image: '/images/tee5.png',
-     bestseller: true
+    bestseller: true
   },
   {
     id: 6,
@@ -51,7 +51,7 @@ const products = [
     name: 'Peace Tee',
     price: 1150,
     image: '/images/tee8.png',
-     bestseller: true
+    bestseller: true
   }
 ];
 
@@ -92,14 +92,14 @@ const NewDrops = () => {
         <main className="products">
           {products.map(product => (
             <div className="product-card" key={product.id}>
-  <div className="image-container">
-    {product.bestseller && <span className="bestseller-label">Bestseller</span>}
-    <img src={product.image} alt={product.name} />
-  </div>
-  <h4>{product.name}</h4>
-  <p>₹{product.price}</p>
-  <button onClick={() => addToCart(product)}>Add to Cart</button>
-</div>
+              <div className="image-container">
+                {product.bestseller && <span className="bestseller-label">Bestseller</span>}
+                <img src={product.image} alt={product.name} />
+              </div>
+              <h4>{product.name}</h4>
+              <p>₹{product.price}</p>
+              <button onClick={() => addToCart(product)}>Add to Cart</button>
+            </div>
 
           ))}
         </main>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
-const API_URL = "https://your-api-link.com"; // 🔗 replace with real API
+const API_URL = "https://68a6f111639c6a54e9a066dd.mockapi.io/Test" // 🔗 replace with real API
 
 function Navbar() {
   const [user, setUser] = useState(null);

@@ -11,16 +11,21 @@ const Footer = () => {
 
     emailjs
       .sendForm(
-        "your_service_id", // replace
-        "your_template_id", // replace
+        "service_lk8jymx", // replace
+        "template_nsf73j8", // replace
         form.current,
-        "your_public_key"  // replace
+        "RLoYwyHXkHoZl4Jrv"  // replace
       )
-      .then(
-        () => alert("Message Sent Successfully!"),
-        () => alert("Failed to send, please try again.")
-      );
-  };
+      .then((result) => {
+      console.log("✅ Success:", result.text);
+      alert("Message Sent Successfully!");
+      form.current.reset();
+    })
+    .catch((error) => {
+      console.error("❌ Error:", error);
+      alert("Failed to send, please try again.");
+    });
+};
 
   return (
     <footer className="footer">
@@ -46,7 +51,7 @@ const Footer = () => {
             <h3>Shop</h3>
             <ul>
               <li><a href="/new">New</a></li>
-              <li><a href="/woman">Woman</a></li>
+              <li><a href="/women">Women</a></li>
               <li><a href="/men">Men</a></li>
             </ul>
           </div>
