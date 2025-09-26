@@ -101,12 +101,15 @@
 /* Buttons */
 .btn, .login-btn, .signup-btn, .logout-btn {
   padding: 6px 12px;
-  border: 1px solid black;
-  background: none;
+  
+  background:#d6ff30;
   cursor: pointer;
+  color: black;
 }
 .btn:hover, .login-btn:hover, .signup-btn:hover, .logout-btn:hover {
-  background: #d6ff30;
+  background: black;
+  color: white;
+  border: 1px solid black;
 }
 
 
@@ -208,4 +211,7 @@
   border-radius: 25px;
   cursor: pointer;
   margin-top: 15px;
+}
+.welcome{
+  color: #353c18;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './New.css';
 import { Link } from 'react-router-dom';
 
@@ -55,12 +55,19 @@ const products = [
   }
 ];
 
-const NewDrops = () => {
-  const [cart, setCart] = useState([]);
-
+const New = ({ wishlist, setWishlist }) => {
   const addToCart = (product) => {
-    setCart([...cart, product]);
     alert(`${product.name} added to cart!`);
+  };
+
+  const addToWishlist = (product) => {
+    const exists = wishlist.find(item => item.id === product.id);
+    if (!exists) {
+      setWishlist([...wishlist, product]);
+      alert(`${product.name} added to wishlist!`);
+    } else {
+      alert(`${product.name} is already in wishlist!`);
+    }
   };
 
   return (
@@ -96,11 +103,20 @@ const NewDrops = () => {
                 {product.bestseller && <span className="bestseller-label">Bestseller</span>}
                 <img src={product.image} alt={product.name} />
               </div>
-              <h4>{product.name}</h4>
+              <h4>
+                {product.name}
+                <span
+                  className="wishlist-emoji"
+                  onClick={() => addToWishlist(product)}
+                  style={{ cursor: 'pointer', marginLeft: '10px' }}
+                  title="Add to Wishlist"
+                >
+                  ❤️
+                </span>
+              </h4>
               <p>₹{product.price}</p>
               <button onClick={() => addToCart(product)}>Add to Cart</button>
             </div>
-
           ))}
         </main>
       </div>
@@ -108,4 +124,6 @@ const NewDrops = () => {
   );
 };
 
-export default NewDrops;
+export default New;
+
+

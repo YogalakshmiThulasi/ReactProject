@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Added useEffect import
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
-const API_URL = "https://68a6f111639c6a54e9a066dd.mockapi.io/Test" // 🔗 replace with real API
+const API_URL = "https://68a6f111639c6a54e9a066dd.mockapi.io/Test"; // Your MockAPI endpoint
 
 function Navbar() {
   const [user, setUser] = useState(null);
@@ -12,70 +12,116 @@ function Navbar() {
   const [showWishlist, setShowWishlist] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const [signupError, setSignupError] = useState(""); // Added missing signupError state
 
-  // ✅ Handle login
+  // Load logged-in user from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("user");
+    if (saved) {
+      setUser(JSON.parse(saved));
+    }
+  }, []);
+
+  // Login handler
   const handleLogin = async (e) => {
     e.preventDefault();
-    const username = e.target.username.value;
+    setLoginError("");
+
+    const username = e.target.username.value.trim();
     const password = e.target.password.value;
 
     try {
-      const res = await fetch(
-        `${API_URL}/users?username=${username}&password=${password}`
-      );
-      const data = await res.json();
+      // Fetch all users
+      const res = await fetch(`${API_URL}`);
+      if (!res.ok) {
+        throw new Error("Network response was not ok: " + res.status);
+      }
+      const users = await res.json();
 
-      if (data.length > 0) {
-        setUser(data[0]);
+      // Find user by username + password
+      const found = users.find(
+        (u) => u.username === username && u.password === password
+      );
+
+      if (found) {
+        setUser(found);
+        localStorage.setItem("user", JSON.stringify(found));
         setShowLogin(false);
       } else {
-        alert("Invalid credentials or user does not exist!");
+        setLoginError("Invalid username or password");
       }
     } catch (err) {
       console.error("Login error:", err);
+      setLoginError("Something went wrong during login");
     }
   };
 
-  // ✅ Handle signup
+  // Signup handler
   const handleSignup = async (e) => {
     e.preventDefault();
-    const username = e.target.username.value;
+    setSignupError("");
+
+    const username = e.target.username.value.trim();
     const password = e.target.password.value;
 
     try {
-      const res = await fetch(`${API_URL}/users?username=${username}`);
-      const exists = await res.json();
+      // Fetch all users
+      const res = await fetch(`${API_URL}`);
+      if (!res.ok) {
+        throw new Error("Network response was not ok: " + res.status);
+      }
+      const users = await res.json();
 
-      if (exists.length > 0) {
-        alert("User already exists!");
+      // Check if username already exists
+      const exists = users.find((u) => u.username === username);
+      if (exists) {
+        setSignupError("Username already exists");
         return;
       }
 
+      // Create new user
       const newUser = { username, password };
-      await fetch(`${API_URL}/users`, {
+      const createRes = await fetch(`${API_URL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUser),
       });
 
-      alert("Signup successful! Please login.");
-      setShowLogin(true);
+      if (!createRes.ok) {
+        throw new Error("Failed to create user: " + createRes.status);
+      }
+      const created = await createRes.json();
+
+      // Auto-login after signup
+      setUser(created);
+      localStorage.setItem("user", JSON.stringify(created));
+      setShowLogin(false);
     } catch (err) {
       console.error("Signup error:", err);
+      setSignupError("Something went wrong during signup");
     }
   };
 
-  // ✅ Add to cart and wishlist
+  // Logout handler
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+  };
+
+  // Add to wishlist
   const addToWishlist = (product) => {
     if (!wishlist.find((item) => item.id === product.id)) {
       setWishlist([...wishlist, product]);
     }
   };
 
+  // Add to cart
   const addToCart = (product) => {
     setCart([...cart, product]);
   };
 
+  // Calculate cart total price
   const calculateTotal = () =>
     cart.reduce((total, item) => total + item.price, 0);
 
@@ -101,16 +147,26 @@ function Navbar() {
         <div className="nav-actions">
           {user ? (
             <>
-              <span className="welcome">Hi, {user.username}</span>
-              <button className="logout-btn" onClick={() => setUser(null)}>Logout</button>
+              <span className="welcome">Welcome, {user.username}</span>
+              <button className="logout-btn" onClick={handleLogout}>Logout</button>
             </>
           ) : (
-            <button className="login-btn" onClick={() => setShowLogin(true)}>
+            <button className="login-btn" onClick={() => {
+              setShowLogin(true);
+              setIsSignup(false);
+              setLoginError("");
+              setSignupError("");
+            }}>
               <span className="icon">👤</span> Log In
             </button>
           )}
 
-          <span className="wishlist-btn" onClick={() => setShowWishlist(!showWishlist)}>❤️</span>
+          <span
+            className="wishlist-btn"
+            onClick={() => setShowWishlist(!showWishlist)}
+          >
+            ❤️
+          </span>
           <span className="cart-btn" onClick={() => setShowCart(!showCart)}>
             🛍 <span className="cart-count">{cart.length}</span>
           </span>
@@ -120,7 +176,9 @@ function Navbar() {
       {/* Wishlist Popup */}
       {showWishlist && (
         <div className="popup">
-          <button className="close" onClick={() => setShowWishlist(false)}>✖</button>
+          <button className="close" onClick={() => setShowWishlist(false)}>
+            ✖
+          </button>
           <h3>Wishlist</h3>
           {wishlist.length > 0 ? (
             wishlist.map((item) => (
@@ -168,7 +226,9 @@ function Navbar() {
       {showLogin && (
         <div className="popup-overlay">
           <div className="popup login-popup">
-            <button className="close" onClick={() => setShowLogin(false)}>✖</button>
+            <button className="close" onClick={() => setShowLogin(false)}>
+              ✖
+            </button>
             <h2 className="login-title">{isSignup ? "SIGN UP" : "USER LOGIN"}</h2>
 
             <form onSubmit={isSignup ? handleSignup : handleLogin}>
@@ -177,9 +237,22 @@ function Navbar() {
                 <input name="username" placeholder="Username" required />
               </div>
               <div className="input-box">
-                <input name="password" type="password" placeholder="Password" required />
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  required
+                />
                 <span className="icon">🔒</span>
               </div>
+
+              {isSignup && signupError && (
+                <p style={{ color: "red" }}>{signupError}</p>
+              )}
+              {!isSignup && loginError && (
+                <p style={{ color: "red" }}>{loginError}</p>
+              )}
+
               <button className="popup-login-btn" type="submit">
                 {isSignup ? "SIGN UP" : "LOGIN"}
               </button>
@@ -187,8 +260,16 @@ function Navbar() {
 
             <p className="toggle-text">
               {isSignup ? "Already have an account?" : "Don't have an account?"}
-              <br /><br />
-              <span className="toggle-link" onClick={() => setIsSignup(!isSignup)}>
+              <br />
+              <br />
+              <span
+                className="toggle-link"
+                onClick={() => {
+                  setIsSignup(!isSignup);
+                  setLoginError("");
+                  setSignupError("");
+                }}
+              >
                 {isSignup ? "Login" : "Sign Up"}
               </span>
             </p>

@@ -59,7 +59,8 @@
   display: flex;
   justify-content: space-around;
   padding: 2rem;
-  background: #fff;
+ background: #000;
+  color: #fff;
 }
 
 .footer-left h3 {
@@ -74,11 +75,15 @@
 
 .footer-left ul li {
   margin: 0.4rem 0;
+  
+ 
 }
 
 .footer-left ul li a {
   text-decoration: none;
   color: #000;
+   color: #fff;
+  
 }
 
 .footer-left ul li a:hover {
