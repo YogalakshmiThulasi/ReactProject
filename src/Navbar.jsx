@@ -4,16 +4,29 @@ import "./Navbar.css";
 
 const API_URL = "https://68a6f111639c6a54e9a066dd.mockapi.io/Test"; // Your MockAPI endpoint
 
-function Navbar() {
+function Navbar({ wishlist, cart, setWishlist, setCart }) {
   const [user, setUser] = useState(null);
+
+
   const [showLogin, setShowLogin] = useState(false);
-  const [wishlist, setWishlist] = useState([]);
-  const [cart, setCart] = useState([]);
+
+ 
   const [showWishlist, setShowWishlist] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [signupError, setSignupError] = useState(""); // Added missing signupError state
+   const [menuOpen, setMenuOpen] = useState(false); 
+const removeFromWishlist = (id) => {
+  const updatedWishlist = wishlist.filter(item => item.id !== id);
+  setWishlist(updatedWishlist);
+};
+
+const removeFromCart = (id) => {
+  const updatedCart = cart.filter(item => item.id !== id);
+  setCart(updatedCart);
+};
+
 
   // Load logged-in user from localStorage on mount
   useEffect(() => {
@@ -22,6 +35,22 @@ function Navbar() {
       setUser(JSON.parse(saved));
     }
   }, []);
+
+  useEffect(() => {
+  if (showCart || showWishlist || showLogin) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
+}, [showCart, showWishlist, showLogin]);
+
+const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+useEffect(() => {
+  const handleResize = () => setIsMobile(window.innerWidth <= 768);
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
 
   // Login handler
   const handleLogin = async (e) => {
@@ -137,12 +166,60 @@ function Navbar() {
         <div className="logo">
           <Link to="/">T SHOP</Link>
         </div>
+         {/* ✅ Hamburger Icon */}
+       <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+  {menuOpen ? "✖" : "☰"}
+ 
+</div>
 
-        <div className="nav-links">
-          <Link to="/new" className="active">New</Link>
-          <Link to="/women" className="active">Women</Link>
-          <Link to="/men" className="active">Men</Link>
-        </div>
+
+       <div className={`nav-links ${menuOpen ? "open" : ""}`}>
+       
+  <Link to="/new" className="active" onClick={() => setMenuOpen(false)}>New</Link>
+  <Link to="/women" className="active" onClick={() => setMenuOpen(false)}>Women</Link>
+  <Link to="/men" className="active" onClick={() => setMenuOpen(false)}>Men</Link>
+
+  {/* ADD THESE BELOW FOR MOBILE */}
+  <div className="mobile-actions">
+     {/* ✅ Only render mobile-actions if screen is mobile */}
+  {isMobile && (
+    <div className="mobile-actions">
+      {!user && (
+        <button
+          onClick={() => {
+            setShowLogin(true);
+            setIsSignup(false);
+            setMenuOpen(false);
+          }}
+          className="mobile-action-btn"
+        >
+          👤 Login
+        </button>
+      )}
+      <button
+        onClick={() => {
+          setShowWishlist(true);
+          setMenuOpen(false);
+        }}
+        className="mobile-action-btn"
+      >
+        ❤️ Wishlist
+      </button>
+      <button
+        onClick={() => {
+          setShowCart(true);
+          setMenuOpen(false);
+        }}
+        className="mobile-action-btn"
+      >
+        🛍 Cart ({cart.length})
+      </button>
+    </div>
+  )}
+
+  </div>
+</div>
+
 
         <div className="nav-actions">
           {user ? (
@@ -156,15 +233,13 @@ function Navbar() {
               setIsSignup(false);
               setLoginError("");
               setSignupError("");
+              setMenuOpen(false); // close menu
             }}>
               <span className="icon">👤</span> Log In
             </button>
           )}
 
-          <span
-            className="wishlist-btn"
-            onClick={() => setShowWishlist(!showWishlist)}
-          >
+          <span className="wishlist-btn" onClick={() => setShowWishlist(!showWishlist)}>
             ❤️
           </span>
           <span className="cart-btn" onClick={() => setShowCart(!showCart)}>
@@ -174,53 +249,112 @@ function Navbar() {
       </nav>
 
       {/* Wishlist Popup */}
-      {showWishlist && (
-        <div className="popup">
-          <button className="close" onClick={() => setShowWishlist(false)}>
-            ✖
+{showWishlist && (
+  <div className="popup">
+    <button className="close" onClick={() => setShowWishlist(false)}>✖</button>
+    <h3>Wishlist</h3>
+    {wishlist.length > 0 ? (
+      wishlist.map((item) => (
+        <div
+          key={item.id}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '10px',
+            borderBottom: '1px solid #ccc',
+            paddingBottom: '10px'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <img
+              src={item.image}
+              alt={item.name}
+              width="50"
+              style={{ marginRight: '10px' }}
+            />
+            <div>
+              <div>{item.name}</div>
+              <div>₹{item.price}</div>
+            </div>
+          </div>
+          <button
+            onClick={() => removeFromWishlist(item.id)}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '18px',
+              cursor: 'pointer',
+              color: 'red'
+            }}
+            title="Remove from Wishlist"
+          >
+            ❌
           </button>
-          <h3>Wishlist</h3>
-          {wishlist.length > 0 ? (
-            wishlist.map((item) => (
-              <div key={item.id}>
-                <img src={item.image} alt={item.name} width="50" />
-                {item.name}
-              </div>
-            ))
-          ) : (
-            <p>No items in wishlist</p>
-          )}
         </div>
-      )}
+      ))
+    ) : (
+      <p>No items in wishlist</p>
+    )}
+  </div>
+)}
+
+
 
       {/* Cart Popup */}
-      {showCart && (
-        <div className="popup">
-          <button className="close" onClick={() => setShowCart(false)}>✖</button>
-          <h3>Cart</h3>
-          {cart.length > 0 ? (
-            <>
-              {cart.map((item, i) => (
-                <div key={i}>
-                  <img src={item.image} alt={item.name} width="50" />
-                  {item.name} - ₹{item.price}
-                </div>
-              ))}
-              <h4>Total: ₹{calculateTotal()}</h4>
-              <button
-                className="btn"
-                onClick={() =>
-                  alert("Dispatching order of ₹" + calculateTotal())
-                }
-              >
-                Dispatch
-              </button>
-            </>
-          ) : (
-            <p>Cart is empty</p>
-          )}
-        </div>
-      )}
+{showCart && (
+  <div className="popup">
+    <button className="close" onClick={() => setShowCart(false)}>✖</button>
+    <h3>Cart</h3>
+    {cart.length > 0 ? (
+      <>
+        {cart.map((item, i) => (
+          <div
+            key={i}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '10px',
+              borderBottom: '1px solid #ccc',
+              paddingBottom: '10px'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <img
+                src={item.image}
+                alt={item.name}
+                width="50"
+                style={{ marginRight: '10px' }}
+              />
+              <div>
+                <div>{item.name}</div>
+                <div>₹{item.price}</div>
+              </div>
+            </div>
+            <button
+              onClick={() => removeFromCart(item.id)}
+              style={{
+                background: 'none',
+                border: 'none',
+                fontSize: '18px',
+                cursor: 'pointer',
+                color: 'red'
+              }}
+              title="Remove from Cart"
+            >
+              ❌
+            </button>
+          </div>
+        ))}
+        <h4>Total: ₹{calculateTotal()}</h4>
+      </>
+    ) : (
+      <p>Cart is empty</p>
+    )}
+  </div>
+)}
+
 
       {/* Login/Signup Popup */}
       {showLogin && (

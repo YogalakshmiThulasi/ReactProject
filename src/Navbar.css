@@ -1,4 +1,7 @@
-/* Top banner */
+/* ------------------------ */
+/* 🌐 GENERAL STYLES */
+/* ------------------------ */
+
 .top-banner {
   background: black;
   color: white;
@@ -7,13 +10,13 @@
   font-size: 14px;
 }
 
-/* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #000;
   font-family: Arial, sans-serif;
+  flex-wrap: wrap;
 }
 
 /* Logo */
@@ -28,10 +31,11 @@
   color: black;
 }
 
-/* Links */
+/* Nav Links */
 .nav-links {
   display: flex;
   gap: 40px;
+ 
 }
 .nav-links a {
   text-decoration: none;
@@ -45,7 +49,7 @@
   font-weight: bold;
 }
 
-/* Right actions */
+/* Actions (Login, Wishlist, Cart) */
 .nav-actions {
   display: flex;
   align-items: center;
@@ -72,8 +76,9 @@
   cursor: pointer;
 }
 
-
-/* Popup panels */
+/* ------------------------ */
+/* 🛍️ POPUPS */
+/* ------------------------ */
 .popup {
   position: fixed;
   top: 0;
@@ -84,72 +89,49 @@
   border-left: 2px solid black;
   padding: 20px;
   overflow-y: auto;
-  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 .popup h3 {
   margin-top: 0;
 }
-.close {
+.popup .close {
+  font-size: 24px;
   background: none;
   border: none;
-  font-size: 20px;
-  cursor: pointer;
   float: right;
+  cursor: pointer;
 }
 
-/* Buttons */
-.btn, .login-btn, .signup-btn, .logout-btn {
-  padding: 6px 12px;
-  
-  background:#d6ff30;
+.close {
+  position: absolute;
+  top: 35px;
+  right: 15px;
+  font-size: 22px;
   cursor: pointer;
+  background: none;
+  border: none;
   color: black;
 }
-.btn:hover, .login-btn:hover, .signup-btn:hover, .logout-btn:hover {
-  background: black;
-  color: white;
-  border: 1px solid black;
-}
 
-
-.toggle-text {
-  font-size: 14px;
-  margin-top: 10px;
-  color: black
-}
-
-.toggle-link {
-  font-weight: bold;
-  color: #000;
-  background: #d6ff30;
-  padding: 3px 8px;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.toggle-link:hover {
-  background: black;
-  color: #d6ff30;
-}
-
-/* Dark background overlay */
+/* ------------------------ */
+/* 🔐 LOGIN/SIGNUP POPUP */
+/* ------------------------ */
 .popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background:radial-gradient(#d6ff30,black);
+  background: radial-gradient(#d6ff30, black);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
 }
 
-/* Popup box */
 .login-popup {
-  
+  background: white;
   padding: 30px;
   border-radius: 20px;
   width: 350px;
@@ -162,19 +144,6 @@
   margin-bottom: 20px;
 }
 
-/* Close button */
-.close {
-  position: absolute;
-  top: 35px;
-  right: 15px;
-  font-size: 22px;
-  cursor: pointer;
-  background: none;
-  border: none;
-  color: black;
-}
-
-/* Input boxes styled like image */
 .input-box {
   display: flex;
   align-items: center;
@@ -200,7 +169,6 @@
   margin: 0 8px;
 }
 
-/* White Login button */
 .popup-login-btn {
   width: 100%;
   padding: 12px;
@@ -212,6 +180,150 @@
   cursor: pointer;
   margin-top: 15px;
 }
-.welcome{
+
+.toggle-text {
+  font-size: 14px;
+  margin-top: 10px;
+  color: black;
+}
+
+.toggle-link {
+  font-weight: bold;
+  color: #000;
+  background: #d6ff30;
+  padding: 3px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.toggle-link:hover {
+  background: black;
+  color: #d6ff30;
+}
+
+.btn,
+.login-btn,
+.signup-btn,
+.logout-btn {
+  padding: 6px 12px;
+  background: #d6ff30;
+  cursor: pointer;
+  color: black;
+}
+.btn:hover,
+.login-btn:hover,
+.signup-btn:hover,
+.logout-btn:hover {
+  background: black;
+  color: white;
+  border: 1px solid black;
+}
+
+.welcome {
   color: #353c18;
 }
+
+/* ------------------------ */
+/* 🍔 HAMBURGER MENU */
+/* ------------------------ */
+/* Hide hamburger by default (desktop) */
+.hamburger {
+  display: none;
+  position: relative; 
+  z-index: 1100;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 20px;
+  background-color: white;
+  border-radius: 4px;
+  user-select: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+
+
+
+
+/* ------------------------ */
+/* 📱 MOBILE STYLES */
+/* ------------------------ */
+@media screen and (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    background: white;
+    width: 100%;
+    text-align: center;
+    z-index: 100;
+    border-top: 1px solid #ccc;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .nav-actions {
+    display: none; /* Hide desktop Login/Wishlist/Cart on mobile */
+  }
+
+  .mobile-actions {
+    display: flex; /* Show only on mobile */
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+  }
+
+  .mobile-action-btn {
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    color: black;
+  }
+
+  .mobile-action-btn:hover {
+    background: #f0f0f0;
+  }
+
+  .popup {
+    width: 100% !important;
+    height: 100% !important;
+    top: 0;
+    right: 0;
+    border: none;
+    padding: 20px;
+    font-size: 16px;
+    z-index: 1000;
+    overflow-y: auto;
+    background: white;
+  }
+
+  .popup h3 {
+    font-size: 20px;
+    margin-top: 40px;
+  }
+
+  .popup img {
+    width: 40px;
+  }
+
+  .popup button {
+    font-size: 16px;
+  }
+}
+
