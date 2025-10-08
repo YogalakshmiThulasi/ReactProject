@@ -7,6 +7,7 @@ import Women from './Women';
 import Home from './Home';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // 🔁 Make sure this is included
+import Footer from './Footer';
 
 function App() {
   const [wishlist, setWishlist] = useState([]);
@@ -57,6 +58,7 @@ function App() {
         />
       </Routes>
       <ToastContainer position="top-right" autoClose={2000} />
+     <Footer/>
     </Router>
   );
 }

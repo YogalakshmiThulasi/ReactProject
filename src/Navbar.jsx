@@ -167,10 +167,12 @@ useEffect(() => {
           <Link to="/">T SHOP</Link>
         </div>
          {/* ✅ Hamburger Icon */}
-       <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-  {menuOpen ? "✖" : "☰"}
- 
-</div>
+     {!showCart && !showWishlist && !showLogin && (
+  <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+    {menuOpen ? "✖" : "☰"}
+  </div>
+)}
+
 
 
        <div className={`nav-links ${menuOpen ? "open" : ""}`}>
@@ -214,6 +216,8 @@ useEffect(() => {
       >
         🛍 Cart ({cart.length})
       </button>
+
+
     </div>
   )}
 
@@ -252,7 +256,7 @@ useEffect(() => {
 {showWishlist && (
   <div className="popup">
     <button className="close" onClick={() => setShowWishlist(false)}>✖</button>
-    <h3>Wishlist</h3>
+    <h3 style={{textAlign:'center'}}>Wishlist</h3>
     {wishlist.length > 0 ? (
       wishlist.map((item) => (
         <div
@@ -263,7 +267,8 @@ useEffect(() => {
             justifyContent: 'space-between',
             marginBottom: '10px',
             borderBottom: '1px solid #ccc',
-            paddingBottom: '10px'
+            paddingBottom: '10px',
+            marginLeft:'30px'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -294,7 +299,7 @@ useEffect(() => {
         </div>
       ))
     ) : (
-      <p>No items in wishlist</p>
+      <p style={{textAlign:'center'}}>No items in wishlist</p>
     )}
   </div>
 )}
@@ -305,7 +310,7 @@ useEffect(() => {
 {showCart && (
   <div className="popup">
     <button className="close" onClick={() => setShowCart(false)}>✖</button>
-    <h3>Cart</h3>
+    <h3 style={{textAlign:'center'}}>Cart</h3>
     {cart.length > 0 ? (
       <>
         {cart.map((item, i) => (
@@ -317,7 +322,8 @@ useEffect(() => {
               justifyContent: 'space-between',
               marginBottom: '10px',
               borderBottom: '1px solid #ccc',
-              paddingBottom: '10px'
+              paddingBottom: '10px',
+               marginLeft:'30px'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -350,7 +356,7 @@ useEffect(() => {
         <h4>Total: ₹{calculateTotal()}</h4>
       </>
     ) : (
-      <p>Cart is empty</p>
+      <p style={{textAlign:'center'}}>Cart is empty</p>
     )}
   </div>
 )}
